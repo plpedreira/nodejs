@@ -1,0 +1,12 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "API de gerenciamento de tickets de suporte",
+  "main": "sever.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/sever.js"
+  },
+  "author": "Pedro Lucas Araujo Pedreira",
+  "license": "ISC"
+}
