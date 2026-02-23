@@ -17,4 +17,15 @@ export class Database {
     #persist(){
         fs.writeFile(DATABASE_PATH, JSON.stringify(this.#database))
     }
+
+    insert (tabele, data) {
+    if(Array.isArray(this.#database[tabele])){
+        this.#database[tabele].push(data)
+    } else {
+        this.#database[tabele] = [data]
+    }
+
+    this.#persist()
+    
+ }
 }
