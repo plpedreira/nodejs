@@ -1,5 +1,6 @@
 import { routes } from "../routes/index.js";
 import { Database } from "../database/database.js";
+import { extractQueryParams } from "../utils/extractQueryParams.js";
 
 const database = new Database()
 
@@ -9,6 +10,13 @@ export function routeHandler(request, response) {
     })
 
     if (route) {
+        const routParams = request.url.match(route.path)
+
+        const { query } =routParams.groups
+        console.log(extractQueryParams(query))
+
+        request.query = query ? extractQueryParams(query) : {}
+
         return route.controller({ request, response, database })
     }
 
