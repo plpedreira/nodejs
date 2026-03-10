@@ -18,7 +18,7 @@ export class Database {
         fs.writeFile(DATABASE_PATH, JSON.stringify(this.#database))
     }
 
-    insert (tabele, data) {
+    insert (table, data) {
     if(Array.isArray(this.#database[tabele])){
         this.#database[tabele].push(data)
     } else {
@@ -29,8 +29,18 @@ export class Database {
     
  }
 
- select(table){
-    let data =this.#database[table] ?? []
+ select(table, filters){
+    let data = this.#database[table] ?? []
+
+    if(filters){
+        data = data.filter(( row ) => {
+            const test = Object.entries(filters).some(([key, value]) => {
+            return row[key].toLowerCase().includes(value.toLowerCase())
+        })
+
+        console.log(test)
+    }
+
     return data
 
  }
