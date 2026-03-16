@@ -1,24 +1,30 @@
-import { routes } from "../routes/index.js";
 import { Database } from "../database/database.js";
+import { routes } from "../routes/index.js";
 import { extractQueryParams } from "../utils/extractQueryParams.js";
 
-const database = new Database()
+const database = new Database();
 
 export function routeHandler(request, response) {
-    const route = routes.find((route) => {
-        return route.method === request.method && route.path.test(request.url)
-    })
+  const route = routes.find((route) => {
+    // console.log("route:", route);
+    // console.log("test:", route.path.test(request.url));
 
-    if (route) {
-        const routParams = request.url.match(route.path)
+    // return route.method === request.method && route.path === request.url;
+    return route.method === request.method && route.path.test(request.url);
+  });
 
-        const { query } =routParams.groups
-        console.log(extractQueryParams(query))
+  if (route) {
+    const routeParams = request.url.match(route.path);
+    // console.log("routeParams:", routeParams);
 
-        request.query = query ? extractQueryParams(query) : {}
+    const { query, ...params } = routeParams.groups;
 
-        return route.controller({ request, response, database })
-    }
+    request.params = params;
+    // console.log("extractQueryParams", extractQueryParams(query));
+    request.query = query ? extractQueryParams(query) : {};
 
-    return response.writeHead(404).end("Not Found")
+    return route.controller({ request, response, database });
+  }
+
+  return response.writeHead(404).end();
 }
